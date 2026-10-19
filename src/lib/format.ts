@@ -11,6 +11,11 @@ export function emphasize(text: string): string {
   return text.replace(/[&<>"']/g, (c) => ESCAPES[c]).replace(/\*(.+?)\*/g, '<em>$1</em>');
 }
 
+/** Drops the *emphasis* markers, for places that can't style text (alt text, meta tags). */
+export function plainText(text: string): string {
+  return text.replace(/\*(.+?)\*/g, '$1');
+}
+
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 function month(value: string): string {

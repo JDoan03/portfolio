@@ -35,6 +35,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Check link-preview image and tags
+        run: npm run test:dist
+
       - name: Check links
         run: npm run test:links
 

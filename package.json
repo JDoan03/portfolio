@@ -11,16 +11,20 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "test:dist": "node --test tests/*.test.ts",
     "test:links": "linkinator ./dist --config linkinator.config.json",
     "test:lighthouse": "lhci autorun",
-    "test": "npm run check && npm run build && npm run test:links && npm run test:lighthouse",
+    "test": "npm run check && npm run build && npm run test:dist && npm run test:links && npm run test:lighthouse",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
     "@fontsource-variable/atkinson-hyperlegible-next": "^5.3.0",
     "@fontsource-variable/bricolage-grotesque": "^5.3.0",
-    "astro": "^7.4.0"
+    "@fontsource/bricolage-grotesque": "^5.3.0",
+    "astro": "^7.4.0",
+    "satori": "^0.34.1",
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
