@@ -15,6 +15,11 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  # The production address. Canonical URLs, og:url and the sitemap are built from it (astro.config.mjs).
+  # If it changes, change the matching skip in linkinator.config.json too.
+  SITE_URL: https://josephdoan.dev
+
 jobs:
   checks:
     name: Build, links and Lighthouse
