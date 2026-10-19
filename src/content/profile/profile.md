@@ -28,7 +28,7 @@ education:
 contact:
   heading: "The porch light's on."
   blurb: "Say hello, or just ask about my homelab."
-  email: null # TODO: the address to show publicly
+  email: hello@josephdoan.dev
   linkedin: https://www.linkedin.com/in/josephdoan03
   github: https://github.com/JDoan03
   resume: null # TODO: "/resume.pdf" once a copy without the phone number is in public/
