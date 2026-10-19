@@ -1,0 +1,47 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Page from '../../layouts/Page.astro';
+import { STATUS_LABEL } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ data }) => data.page);
+  return projects.map((project) => ({ params: { id: project.id }, props: { project } }));
+}
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { data } = project;
+const { Content } = await render(project);
+---
+
+<Page title={data.title} description={data.summary}>
+  <header class="head">
+    <span class="pill">{STATUS_LABEL[data.status]}</span>
+    <h1>{data.title}</h1>
+    <p class="summary">{data.summary}</p>
+    <ul class="chips">
+      {data.stack.map((item) => <li>{item}</li>)}
+    </ul>
+  </header>
+  <article class="prose">
+    <Content />
+  </article>
+</Page>
+
+<style>
+  .head {
+    display: grid;
+    gap: 14px;
+    justify-items: start;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .summary {
+    font-size: 1.12rem;
+    max-width: 52ch;
+  }
+</style>

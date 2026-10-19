@@ -1,0 +1,51 @@
+# Runs on every pull request and every push to main. A PR can't merge until this passes
+# (once "Require status checks" is turned on for main in the repo settings).
+# The deploy job joins this file later and runs only on main, after these checks.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Build, links and Lighthouse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Type-check
+        run: npm run check
+
+      - name: Build
+        run: npm run build
+
+      - name: Check links
+        run: npm run test:links
+
+      - name: Lighthouse (performance, accessibility, best practices, SEO ≥ 95)
+        run: npm run test:lighthouse
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci/reports/
+          if-no-files-found: ignore
+          retention-days: 14

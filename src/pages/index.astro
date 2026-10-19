@@ -1,0 +1,386 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import PorchLamp from '../components/PorchLamp.astro';
+import PorchTime from '../components/PorchTime.astro';
+import { dateRange, emphasize, STATUS_LABEL } from '../lib/format';
+import { publishedNotes } from '../lib/notes';
+
+const profile = await getEntry('profile', 'profile');
+if (!profile) throw new Error('src/content/profile/profile.md is missing');
+const p = profile.data;
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const building = projects.filter((project) => project.data.section === 'building');
+const earlier = projects.filter((project) => project.data.section === 'earlier');
+
+const jobs = await Promise.all(
+  (await getCollection('jobs'))
+    .sort((a, b) => a.data.order - b.data.order)
+    .map(async (job) => ({ data: job.data, Content: (await render(job)).Content })),
+);
+
+const notes = await publishedNotes();
+---
+
+<Base title={`${p.name} · ${p.role}`} description={p.description}>
+  <div class="wrap">
+    <SiteHeader name={p.name} />
+
+    <section class="hero">
+      <PorchLamp />
+      <h1 class="hook" set:html={emphasize(p.hook)} />
+      <p class="sub">{p.subhook}</p>
+      <p class="tonight">Tonight in Sacramento it switches on at <PorchTime />, 20 minutes before sunset.</p>
+    </section>
+
+    <p class="intro">{p.intro}</p>
+
+    <section class="sec" aria-labelledby="building">
+      <h2 class="label" id="building">What I'm building</h2>
+      {
+        building.map(({ id, data }) => (
+          <article class="feature">
+            <div class="row">
+              <h3>{data.title}</h3>
+              <span class="pill">{STATUS_LABEL[data.status]}</span>
+            </div>
+            <p>{data.summary}</p>
+            <ul class="chips">
+              {data.stack.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+            {data.page && (
+              <a class="more" href={`/projects/${id}/`}>
+                How it works <span aria-hidden="true">→</span>
+              </a>
+            )}
+          </article>
+        ))
+      }
+    </section>
+
+    <section class="sec" aria-labelledby="work">
+      <h2 class="label" id="work">Where I've worked</h2>
+      {
+        jobs.map(({ data, Content }) => (
+          <article class="job">
+            <h3>{data.org}</h3>
+            <ul class="roles">
+              {data.roles.map((role) => (
+                <li>
+                  <span>{role.title}</span>
+                  <span class="when">{dateRange(role.start, role.end)}</span>
+                </li>
+              ))}
+            </ul>
+            <div class="job-body">
+              <Content />
+            </div>
+          </article>
+        ))
+      }
+    </section>
+
+    <section class="sec" aria-labelledby="earlier">
+      <h2 class="label" id="earlier">Earlier projects</h2>
+      {
+        earlier.map(({ data }) => (
+          <article class="small">
+            <h3>{data.title}</h3>
+            {data.meta && <p class="meta">{data.meta}</p>}
+            <p>{data.summary}</p>
+            <ul class="chips">
+              {data.stack.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+            {(data.repo || data.live) && (
+              <p class="links">
+                {data.repo && <a href={data.repo}>Code on GitHub</a>}
+                {data.live && <a href={data.live}>Live site</a>}
+              </p>
+            )}
+          </article>
+        ))
+      }
+    </section>
+
+    <section class="sec" aria-labelledby="education">
+      <h2 class="label" id="education">Education</h2>
+      <div class="small">
+        <h3>{p.education.degree}</h3>
+        <p class="meta">
+          {p.education.school} · {dateRange(p.education.start, p.education.end)}
+          {p.education.note && ` · ${p.education.note}`}
+        </p>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="toolbox">
+      <h2 class="label" id="toolbox">Toolbox</h2>
+      <div class="tools">
+        {
+          p.toolbox.map((group) => (
+            <p>
+              <b>{group.label}</b>
+              {group.items.join(', ')}
+            </p>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="off">
+      <h2 class="label" id="off">Off the clock</h2>
+      <p class="off">
+        {p.offTheClock}{' '}
+        {
+          notes.length > 0 ? (
+            <a href="/notes/">
+              Read my homelab notes <span aria-hidden="true">→</span>
+            </a>
+          ) : (
+            <span class="tbd">Homelab notes coming soon.</span>
+          )
+        }
+      </p>
+    </section>
+
+    <footer class="foot" aria-labelledby="contact">
+      <h2 class="close" id="contact">{p.contact.heading}</h2>
+      <p class="meta">{p.contact.blurb}</p>
+      <ul class="contact">
+        <li>
+          {p.contact.email ? <a href={`mailto:${p.contact.email}`}>{p.contact.email}</a> : <span class="tbd">Email coming soon</span>}
+        </li>
+        <li><a href={p.contact.linkedin}>LinkedIn</a></li>
+        {p.contact.github && <li><a href={p.contact.github}>GitHub</a></li>}
+        <li>
+          {p.contact.resume ? <a href={p.contact.resume}>Résumé (PDF)</a> : <span class="tbd">Résumé coming soon</span>}
+        </li>
+      </ul>
+    </footer>
+  </div>
+</Base>
+
+<style>
+  .hero {
+    position: relative;
+    display: grid;
+    gap: 18px;
+    padding-block: 36px 28px;
+  }
+
+  .hero > :global(.lamp) {
+    justify-self: end;
+  }
+
+  .hook {
+    position: relative;
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(2.2rem, 9vw, 3.6rem);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+  }
+
+  .hook :global(em) {
+    font-style: normal;
+    color: var(--accent);
+    text-shadow: 0 0 28px var(--glow);
+  }
+
+  .sub {
+    position: relative;
+    font-size: clamp(1.1rem, 4vw, 1.3rem);
+    line-height: 1.45;
+    max-width: 36ch;
+  }
+
+  .tonight {
+    position: relative;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .intro {
+    color: var(--muted);
+    max-width: 60ch;
+    padding-block-end: 28px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .sec {
+    display: grid;
+    gap: 18px;
+    padding-block: 36px 4px;
+  }
+
+  h3 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.3rem;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .feature {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    display: grid;
+    gap: 12px;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 12px;
+  }
+
+  .row h3 {
+    min-width: 0;
+  }
+
+  .more {
+    font-weight: 700;
+    color: var(--accent);
+    text-decoration: none;
+    justify-self: start;
+  }
+
+  .more:hover {
+    text-decoration: underline;
+  }
+
+  .job,
+  .small {
+    display: grid;
+    gap: 10px;
+  }
+
+  .job + .job,
+  .small + .small {
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+  }
+
+  .roles {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 2px;
+  }
+
+  .roles li {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0 12px;
+  }
+
+  .roles li:first-child {
+    font-weight: 700;
+  }
+
+  .when {
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .job-body :global(ul) {
+    padding-left: 1.1em;
+    display: grid;
+    gap: 10px;
+  }
+
+  .job-body :global(li::marker) {
+    color: var(--accent);
+  }
+
+  .meta {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    font-size: 0.95rem;
+  }
+
+  .tools {
+    display: grid;
+    gap: 14px;
+  }
+
+  .tools p {
+    font-size: 0.95rem;
+  }
+
+  .tools b {
+    display: block;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .off {
+    max-width: 60ch;
+  }
+
+  .foot {
+    display: grid;
+    gap: 12px;
+    margin-top: 36px;
+    padding-block: 48px 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .close {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(1.7rem, 6.5vw, 2.4rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-shadow: 0 0 28px var(--glow);
+  }
+
+  .contact {
+    list-style: none;
+    padding: 4px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+  }
+
+  @media (min-width: 760px) {
+    .hero {
+      padding-block: 64px 36px;
+    }
+
+    .hero > :global(.lamp) {
+      position: absolute;
+      top: 40px;
+      right: 0;
+    }
+
+    .hook {
+      max-width: 14ch;
+    }
+
+    .tools {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,97 @@
+---
+// The dark-mode toggle, presented as the porch light's switch: dark = light on.
+// The knob is the bulb: amber and glowing when on, grey when off.
+---
+
+<button class="switch" type="button" role="switch" aria-checked="true" data-theme-toggle>
+  <span class="text">Porch light<span class="sr-only"> (dark mode)</span></span>
+  <span class="track" aria-hidden="true"><span class="knob"></span></span>
+</button>
+
+<script>
+  const root = document.documentElement;
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]');
+
+  function sync() {
+    const on = root.dataset.theme !== 'light';
+    buttons.forEach((button) => button.setAttribute('aria-checked', String(on)));
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', on ? '#11131c' : '#f2f3f6');
+  }
+
+  buttons.forEach((button) =>
+    button.addEventListener('click', () => {
+      root.dataset.theme = root.dataset.theme === 'light' ? 'dark' : 'light';
+      try {
+        localStorage.setItem('theme', root.dataset.theme);
+      } catch {}
+      sync();
+    }),
+  );
+
+  sync();
+</script>
+
+<style>
+  .switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 2px 6px 8px;
+    border: 0;
+    border-radius: 999px;
+    background: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .switch:hover {
+    color: var(--fg);
+  }
+
+  .track {
+    position: relative;
+    width: 40px;
+    height: 24px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    transition:
+      background-color 0.3s,
+      border-color 0.3s;
+  }
+
+  .knob {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--muted);
+    transition:
+      transform 0.3s cubic-bezier(0.3, 0.7, 0.4, 1),
+      background-color 0.3s,
+      box-shadow 0.3s;
+  }
+
+  .switch[aria-checked='true'] .track {
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+  }
+
+  .switch[aria-checked='true'] .knob {
+    transform: translateX(16px);
+    background: var(--bulb);
+    box-shadow: 0 0 10px 2px var(--glow);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>

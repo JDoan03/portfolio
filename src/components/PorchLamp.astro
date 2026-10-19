@@ -1,0 +1,88 @@
+---
+// Wall lantern drawn in CSS. Its bulb and glow come from theme tokens, so it is lit only in dark mode.
+---
+
+<div class="lamp" aria-hidden="true">
+  <span class="halo"></span>
+  <span class="bracket"></span>
+  <span class="cap"></span>
+  <span class="glass"><span class="bulb"></span></span>
+  <span class="base"></span>
+</div>
+
+<style>
+  .lamp {
+    position: relative;
+    width: 60px;
+    height: 92px;
+    flex: none;
+  }
+
+  /* The room-filling glow. Centred on the bulb, which sits at (25px, 44px) inside the lamp. */
+  .halo {
+    --size: 360px;
+    position: absolute;
+    left: calc(25px - var(--size) / 2);
+    top: calc(44px - var(--size) / 2);
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--glow), transparent 62%);
+    pointer-events: none;
+  }
+
+  .bracket {
+    position: absolute;
+    top: 22px;
+    right: 0;
+    width: 20px;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--muted);
+  }
+
+  .cap {
+    position: absolute;
+    top: 10px;
+    left: 6px;
+    width: 38px;
+    height: 12px;
+    background: var(--muted);
+    clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%);
+  }
+
+  .glass {
+    position: absolute;
+    top: 22px;
+    left: 10px;
+    width: 30px;
+    height: 46px;
+    border: 2px solid var(--muted);
+    border-radius: 3px 3px 9px 9px;
+    background: var(--lampfill);
+    transition: background-color 0.35s;
+  }
+
+  .bulb {
+    position: absolute;
+    inset: 9px 7px 11px;
+    border-radius: 50%;
+    background: var(--bulb);
+    box-shadow:
+      0 0 14px 5px var(--glow),
+      0 0 70px 26px var(--glow);
+    transition:
+      background-color 0.35s,
+      box-shadow 0.35s;
+  }
+
+  .base {
+    position: absolute;
+    top: 68px;
+    left: 16px;
+    width: 18px;
+    height: 6px;
+    border-radius: 0 0 4px 4px;
+    background: var(--muted);
+  }
+</style>

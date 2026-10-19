@@ -1,0 +1,4 @@
+# Store text files with LF in the repo so Windows and the Linux CI runner see identical files.
+* text=auto eol=lf
+*.pdf binary
+*.woff2 binary

@@ -1,0 +1,59 @@
+---
+import Page from '../../layouts/Page.astro';
+import { formatDate, publishedNotes } from '../../lib/notes';
+
+const notes = await publishedNotes();
+---
+
+<Page title="Homelab notes" description="Notes on what runs in my homelab and the problems it solves for me.">
+  <h1>Homelab notes</h1>
+  <p class="lede">What runs in my homelab, and the problems each piece solves for me.</p>
+  {
+    notes.length === 0 ? (
+      <p class="tbd">The first note is on its way.</p>
+    ) : (
+      <ul class="list">
+        {notes.map(({ id, data }) => (
+          <li>
+            <a href={`/notes/${id}/`}>{data.title}</a>
+            <span class="meta">
+              {formatDate(data.date)}
+              {data.draft && ' · draft'}
+            </span>
+            <p>{data.summary}</p>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</Page>
+
+<style>
+  .lede {
+    color: var(--muted);
+    max-width: 52ch;
+  }
+
+  .list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 22px;
+  }
+
+  .list li {
+    display: grid;
+    gap: 4px;
+  }
+
+  .list a {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.2rem;
+  }
+
+  .meta {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+</style>

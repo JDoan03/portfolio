@@ -1,0 +1,32 @@
+---
+import ThemeSwitch from './ThemeSwitch.astro';
+
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+const isHome = Astro.url.pathname === '/';
+---
+
+<header class="top">
+  {isHome ? <span class="name">{name}</span> : <a class="name" href="/">{name}</a>}
+  <ThemeSwitch />
+</header>
+
+<style>
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .name {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+</style>

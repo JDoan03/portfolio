@@ -1,0 +1,24 @@
+---
+import { formatPacific, porchLightOn } from '../lib/sunset';
+
+// Rendered at build time so the page reads correctly without JavaScript; the script refreshes it daily.
+const fallback = formatPacific(porchLightOn(new Date()));
+---
+
+<strong class="porch-time" data-porch>{fallback}</strong>
+
+<script>
+  import { formatPacific, porchLightOn } from '../lib/sunset';
+
+  const text = formatPacific(porchLightOn());
+  document.querySelectorAll('[data-porch]').forEach((el) => {
+    el.textContent = text;
+  });
+</script>
+
+<style>
+  .porch-time {
+    color: var(--fg);
+    font-variant-numeric: tabular-nums;
+  }
+</style>
