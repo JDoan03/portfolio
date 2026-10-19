@@ -17,7 +17,7 @@ npm test         # everything CI runs: type-check, build, link check, Lighthouse
 Every pull request and push to `main` runs [.github/workflows/ci.yml](.github/workflows/ci.yml). It fails if:
 
 - a content file doesn't match its schema, or the types don't check;
-- any link on the built site is broken (LinkedIn is skipped because it blocks bots);
+- any link on the built site is broken (LinkedIn is skipped because it blocks bots, and links to the site's own address are skipped because they point at the live site, not this build);
 - any of the three pages scores below **95** in Lighthouse performance, accessibility, best practices or SEO (mobile, median of 3 runs);
 - a page ships more than 20 KB of JavaScript.
 
