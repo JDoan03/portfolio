@@ -12,7 +12,7 @@ offTheClock: "Dialing in espresso, always traveling to try new foods, and buildi
 
 toolbox:
   - label: At work
-    items: [C#, .NET Framework 4.8, .NET 8 and 10, Razor Pages, EF Core, SQL Server, MSTest + Moq, JavaScript, jQuery, Azure DevOps, Okta / OIDC]
+    items: [C#, .NET Framework 4.8, .NET 8, ASP.NET MVC, EF Core, SQL Server, MSTest + Moq, JavaScript, jQuery, Azure DevOps, Okta / OIDC]
   - label: On the side
     items: [TypeScript, React, Next.js, Tailwind CSS, Supabase, Node.js]
   - label: At home
