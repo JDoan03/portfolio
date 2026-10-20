@@ -9,6 +9,11 @@ updates:
       # One PR for all minor and patch bumps; major versions still get their own PR.
       minor-and-patch:
         update-types: [minor, patch]
+    ignore:
+      # TypeScript 7 (the Go port) drops the compiler API that `astro check` runs on, and
+      # @astrojs/check only accepts ^5 || ^6. Remove this once its peer range includes 7.
+      - dependency-name: typescript
+        versions: [">=7"]
 
   - package-ecosystem: github-actions
     directory: /
