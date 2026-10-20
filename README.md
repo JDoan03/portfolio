@@ -19,7 +19,7 @@ Every pull request and push to `main` runs [.github/workflows/ci.yml](.github/wo
 - a content file doesn't match its schema, or the types don't check;
 - `SITE_URL` isn't a full URL, or on CI is missing or points at localhost: the build refuses to run, so deployed pages can't point at localhost;
 - a page is missing the tags that give shared links a preview image, or that image isn't a 1200×630 PNG under 300 KB ([tests/](tests/));
-- any link on the built site is broken (LinkedIn is skipped because it blocks bots);
+- any link on the built site is broken (LinkedIn is skipped because it blocks bots, and links to the site's own address are skipped because they point at the live site, not this build);
 - any of the three pages scores below **95** in Lighthouse performance, accessibility, best practices or SEO (mobile, median of 3 runs);
 - a page ships more than 20 KB of JavaScript.
 

@@ -2,8 +2,9 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// Canonical URLs, og:url, og:image and the sitemap are built from SITE_URL. CI builds are the ones
-// that get deployed, so there it must be the public address; local builds fall back to the dev server.
+// Canonical URLs, og:url, og:image and the sitemap are built from SITE_URL. CI sets it to the production
+// address (.github/workflows/ci.yml) and CI builds are the ones that get deployed, so there it must be
+// the public address; local builds fall back to the dev server.
 // tests/site-url.test.ts checks that a bad SITE_URL stops the build.
 function siteUrl() {
   const { SITE_URL, CI } = process.env;

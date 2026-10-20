@@ -3,6 +3,7 @@
   "verbosity": "error",
   "skip": [
     "^https?://(www\\.)?linkedin\\.com",
-    "^http://localhost:4321"
+    "^http://localhost:4321",
+    "^https://(www\\.)?josephdoan\\.dev(/|$)"
   ]
 }
