@@ -1,6 +1,7 @@
-# Runs on every pull request and every push to main. A PR can't merge until this passes
-# (once "Require status checks" is turned on for main in the repo settings).
-# The deploy job joins this file later and runs only on main, after these checks.
+# Runs on every pull request and every push to main. A PR can't merge until this passes:
+# main's branch protection requires the "Build and test" check by name, so renaming the job
+# means updating that setting too. The deploy job joins this file later and runs only on main,
+# after these checks.
 name: CI
 
 on:
@@ -17,7 +18,7 @@ concurrency:
 
 jobs:
   checks:
-    name: Build, links and Lighthouse
+    name: Build and test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
