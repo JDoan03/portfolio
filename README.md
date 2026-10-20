@@ -54,7 +54,7 @@ Everything you'd normally change is Markdown in `src/content/`. Edit a file (in 
 
 If a field is missing or malformed, `npm run build` fails and names the file and field.
 
-The image LinkedIn, Slack and iMessage show for a shared link (`/social-preview.png`) is drawn at build time from the name, role, location and hook in `profile.md` and the dark theme tokens, so it never needs editing by hand.
+The image LinkedIn, Slack and iMessage show for a shared link (`/social-preview.png`) is drawn at build time from the name, role and hook in `profile.md` and the dark theme tokens, so it never needs editing by hand.
 
 ## The porch light
 

@@ -12,7 +12,6 @@ export const SOCIAL_PREVIEW = { width: 1200, height: 630 } as const;
 export interface PreviewContent {
   name: string;
   role: string;
-  location: string;
   hook: string; // *asterisks* mark the phrase that glows, as on the home page
 }
 
@@ -158,7 +157,7 @@ function card(content: PreviewContent, theme: Theme): VNode {
             },
             hook,
           ),
-          el('div', { fontSize: 28, fontWeight: 600, color: theme.muted }, `${content.role} · ${content.location}`),
+          el('div', { fontSize: 28, fontWeight: 600, color: theme.muted }, content.role),
         ],
       ),
     ],
