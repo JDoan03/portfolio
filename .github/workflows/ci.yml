@@ -1,6 +1,7 @@
-# Runs on every pull request and every push to main. A PR can't merge until this passes
-# (once "Require status checks" is turned on for main in the repo settings).
-# The deploy job joins this file later and runs only on main, after these checks.
+# Runs on every pull request and every push to main. A PR can't merge until this passes:
+# main's branch protection requires the "Build and test" check by name, so renaming the job
+# means updating that setting too. The deploy job joins this file later and runs only on main,
+# after these checks.
 name: CI
 
 on:
@@ -16,13 +17,13 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # The production address. Canonical URLs, og:url and the sitemap are built from it (astro.config.mjs).
+  # The production address. Canonical URLs, og:url, og:image and the sitemap are built from it (astro.config.mjs).
   # If it changes, change the matching skip in linkinator.config.json too.
   SITE_URL: https://josephdoan.dev
 
 jobs:
   checks:
-    name: Build, links and Lighthouse
+    name: Build and test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -39,6 +40,9 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Check SITE_URL guard and link previews
+        run: npm run test:build
 
       - name: Check links
         run: npm run test:links
