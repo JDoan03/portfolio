@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import satori from 'satori';
 import sharp from 'sharp';
-import { plainText } from './format';
+import { emphasisRuns, plainText, type TextRun } from './format';
 
 /** The size LinkedIn, Slack and iMessage expect for a large link preview. */
 export const SOCIAL_PREVIEW = { width: 1200, height: 630 } as const;
@@ -49,15 +49,15 @@ const el = (type: string, style: Style, children?: VNode['props']['children']): 
   props: { style, children },
 });
 
-/** "the *porch light*. Now" -> words, each a run of plain and glowing pieces ("light." is two). */
-function words(text: string): { text: string; em: boolean }[][] {
-  const result: { text: string; em: boolean }[][] = [[]];
-  text.split(/\*(.+?)\*/).forEach((part, i) => {
-    part.split(' ').forEach((chunk, j) => {
-      if (j > 0) result.push([]);
-      if (chunk) result[result.length - 1].push({ text: chunk, em: i % 2 === 1 });
+/** "the *porch light*. Now" -> words, each made of plain and glowing runs ("light." is two). */
+function words(text: string): TextRun[][] {
+  const result: TextRun[][] = [[]];
+  for (const run of emphasisRuns(text)) {
+    run.text.split(' ').forEach((chunk, i) => {
+      if (i > 0) result.push([]);
+      if (chunk) result[result.length - 1].push({ text: chunk, em: run.em });
     });
-  });
+  }
   return result.filter((word) => word.length > 0);
 }
 

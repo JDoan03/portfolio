@@ -1,6 +1,6 @@
 ---
 // Layout for every page except the home page: project case studies, notes, 404.
-import { getEntry } from 'astro:content';
+import { getProfile } from '../lib/profile';
 import Base from './Base.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 
@@ -10,8 +10,7 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
-const profile = await getEntry('profile', 'profile');
-const name = profile?.data.name ?? 'Home';
+const { name } = await getProfile();
 ---
 
 <Base title={`${title} · ${name}`} description={description}>
