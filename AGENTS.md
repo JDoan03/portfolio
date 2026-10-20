@@ -5,7 +5,7 @@ Joseph Doan's portfolio site: Astro 7, static output, deployed to the hosting pl
 ## Rules
 
 - Content lives in `src/content/` (Markdown + frontmatter, schemas in `src/content.config.ts`). Change words there, not in templates.
-- Run `npm test` (type-check, build, link-preview checks, link check, Lighthouse ≥ 95) before opening a PR. CI runs the same checks and `main` requires them.
+- Run `npm test` (type-check, build, build checks, link check, Lighthouse ≥ 95) before opening a PR. CI runs the same checks and `main` requires them.
 - Never commit to `main` directly. Work on a branch and open a PR that says `Closes #<issue>`.
 - Never publish the phone number: not in content, not in `public/resume.pdf`.
 - Dark mode is the default and is "the porch light being on": the lamp, glow, switch and link-preview image all read from the theme tokens in `src/styles/global.css`. Keep them in sync. The preview image (`src/lib/social-preview.ts`) redraws `PorchLamp.astro`'s shapes, so a change to the lamp's shape goes in both.

@@ -9,7 +9,7 @@ npm install
 npm run dev      # http://localhost:4321, drafts included
 npm run build    # static site in dist/
 npm run check    # type-check .astro and .ts files
-npm test         # everything CI runs: type-check, build, link-preview checks, link check, Lighthouse
+npm test         # everything CI runs: type-check, build, build checks (SITE_URL, link previews), link check, Lighthouse
 ```
 
 ## Checks (CI)
@@ -17,6 +17,7 @@ npm test         # everything CI runs: type-check, build, link-preview checks, l
 Every pull request and push to `main` runs [.github/workflows/ci.yml](.github/workflows/ci.yml). It fails if:
 
 - a content file doesn't match its schema, or the types don't check;
+- `SITE_URL` isn't a full URL, or on CI is missing or points at localhost: the build refuses to run, so deployed pages can't point at localhost;
 - a page is missing the tags that give shared links a preview image, or that image isn't a 1200×630 PNG under 300 KB ([tests/](tests/));
 - any link on the built site is broken (LinkedIn is skipped because it blocks bots);
 - any of the three pages scores below **95** in Lighthouse performance, accessibility, best practices or SEO (mobile, median of 3 runs);
@@ -38,7 +39,7 @@ src/
 ├── lib/                # plain TypeScript: sunset maths, formatting, note queries, link-preview image
 └── styles/global.css   # design tokens (colours, fonts) and base styles
 public/                 # copied as-is: favicon, robots.txt, later resume.pdf
-tests/                  # checks on the built site (node --test), run after the build
+tests/                  # build checks (node --test): the SITE_URL guard, and link previews on the built site
 ```
 
 ## Edit the content

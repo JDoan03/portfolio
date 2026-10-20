@@ -11,10 +11,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "test:dist": "node --test tests/*.test.ts",
+    "test:build": "node --test tests/*.test.ts",
     "test:links": "linkinator ./dist --config linkinator.config.json",
     "test:lighthouse": "lhci autorun",
-    "test": "npm run check && npm run build && npm run test:dist && npm run test:links && npm run test:lighthouse",
+    "test": "npm run check && npm run build && npm run test:build && npm run test:links && npm run test:lighthouse",
     "astro": "astro"
   },
   "dependencies": {
