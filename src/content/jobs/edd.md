@@ -5,15 +5,13 @@ roles:
   - title: Information Technology Associate, Full-Stack Developer
     start: "2024-11"
     end: null
-  - title: Student Assistant
+  - title: Student Assistant, Full-Stack Developer
     start: "2023-11"
     end: "2024-11"
 order: 1
 ---
 
-- Built a **Request for Personnel Action (RPA)** web app end to end for HR, used by 50+ staff across several approval roles. It moves hiring and personnel actions off manual tracking, with attachments and email notifications.
-- Created and maintain **25+ REST APIs**, including the .NET 8 microservices behind RPA's business rules, validation and data access.
-- Front ends in ASP.NET (.NET Framework 4.8 and Razor Pages) with JavaScript, jQuery and Ajax.
-- Database-first on SQL Server: schema changes versioned in git and checked with schema compare; EF Core scaffolded from the database, with stored procedures where they're faster.
-- Wrote **100+ unit tests** with MSTest and Moq, and resolved **20+ Veracode security findings**.
-- Now extending sign-in with **Okta and OIDC** so other agencies can authenticate alongside EDD's in-house Active Directory.
+- Moving **EDD's hiring process off paper and email** as one of four developers; the first stages are live across HR. Built the APIs for every hiring-request type and reusable validation rules that stop invalid requests.
+- Led the **preferred-name change** required by state law, from planning to release: 20+ screens, plus reports and database views, now use the name thousands of employees go by. Agreed with HR where legal names must stay.
+- Introduced **pull-request code reviews** for the team's APIs, where developers used to commit straight to dev, and after a proof of concept made Moq the team's standard over brittle Microsoft Fakes. Wrote 100+ unit tests; mentor student assistants.
+- Now adding a second partner agency to **Okta sign-in (OIDC)**, so its staff sign in with their own agency's account.
