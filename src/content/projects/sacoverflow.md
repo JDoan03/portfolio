@@ -5,6 +5,6 @@ status: archived
 section: earlier
 meta: Senior capstone (CAMEL Services) · Sacramento State · team of about eight · 2023–2024
 stack: [Next.js, TypeScript, Tailwind CSS, Supabase, Vercel]
-repo: https://github.com/hashemJaber/SacOverflow
+repo: https://github.com/SacOverflow/CAMEL-Services
 order: 1
 ---
